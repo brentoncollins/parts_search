@@ -71,7 +71,7 @@ def readxls():
 
 
 	# First create application class
-class Application:
+class Application(object):
 
 	def __init__(self, master):
 		self.master = master
@@ -102,10 +102,10 @@ class Application:
 		self.lbox_draw = Listbox(master, width=10, height=25)
 		self.lbox_locker = Listbox(master, width=10, height=25)
 		self.button = Button(master, text="Add Entry", command=NewEntry)
-		
+
 		self.search_label = Label(
 			master, text="Marandoo Fixed Plant Electrical Parts Search", font=("Helvetica", 20), anchor="n")
-		
+
 		self.entry_label = Label(master, text="Search",font=("Helvetica", 20), fg = "red")
 		self.lbox_item_label = Label(master, text="Item")
 		self.lbox_brand_label = Label(master, text="Brand")
@@ -119,7 +119,7 @@ class Application:
 		self.results.set("Enter search term")
 
 		self.results_label = Label(master, textvariable=self.results, font=("Helvetica", 14), fg="blue")
-		
+
 		self.results_label.grid(row=1, column=2, padx=10, pady=3, columnspan=3)
 		self.button.grid(row=0, column=7, padx=10, pady=3)
 
@@ -147,9 +147,17 @@ class Application:
 		# Function for updating the list/doing the search.
 		# It needs to be called here to populate the listbox.
 		self.update_list()
-		
-	def update_list(self):
 
+	def update_list(self, *args):
+		try:
+			self.items = readxls()
+		except FileNotFoundError:
+			messagebox.showerror(
+				"File not found",
+				"Please ensure that 'Parts_List.xlsx' is located in the same directory as the executable."
+				"\n\nNo results will be shown.")
+
+			self.items = []
 		self.results_label = Label(self.master, font=("Helvetica", 20), fg="red")
 
 		search_term = self.search_var.get()
@@ -176,7 +184,7 @@ class Application:
 							self.lbox_part.insert(END, value[4])
 							self.lbox_disc.insert(END, value[5])
 							self.lbox_locker.insert(END, value[6])
-							
+
 							break
 
 		for x in range(0, self.lbox_item.size()):
@@ -195,6 +203,7 @@ class Application:
 class NewEntry(object):
 
 	def __init__(self):
+		# Open new window
 		self.window = Toplevel(root)
 
 		draws = [
@@ -209,6 +218,7 @@ class NewEntry(object):
 					'Locker E', 'Locker F',
 					'Locker G', 'Locker H']
 
+		# Set all vars
 		self.item_var = StringVar()
 		self.brand_var = StringVar()
 		self.part_var = StringVar()
@@ -219,6 +229,7 @@ class NewEntry(object):
 		self.locker_var = StringVar()
 		self.question_var = StringVar()
 
+		# Define all entry's and option menus.
 		self.lbox_item_entry = Entry(self.window, textvariable=self.item_var, width=25)
 		self.lbox_brand_entry = Entry(self.window, textvariable=self.brand_var, width=20)
 		self.lbox_part_entry = Entry(self.window, textvariable=self.part_var, width=20)
@@ -227,7 +238,10 @@ class NewEntry(object):
 		self.lbox_disc_entry = Entry(self.window, textvariable=self.desc_var, width=50)
 		self.lbox_draw_entry = OptionMenu(self.window, self.draw_var, *draws)
 		self.lbox_locker_entry = OptionMenu(self.window, self.locker_var, *lockers)
+		self.lbox_draw_entry.config(width=15)
+		self.lbox_locker_entry.config(width=15)
 
+		# Set all labels
 		self.entry_label = Label(self.window, text="Enter New Item", font=("Helvetica", 16), fg="blue")
 		self.lbox_item_label_entry = Label(self.window, text="Item")
 		self.lbox_brand_label_entry = Label(self.window, text="Brand")
@@ -237,7 +251,15 @@ class NewEntry(object):
 		self.lbox_disc_label_entry = Label(self.window, text="Description")
 		self.lbox_draw_label_entry = Label(self.window, text="Draw")
 		self.lbox_locker_label_entry = Label(self.window, text="Locker")
+		self.button = Button(self.window, text="Add Item", command=self.show_btn_lbl)
+		self.yes_button = Button(self.window, text="Add Entry", command=self.add_item)
+		self.no_button = Button(self.window, text="Change", command=self.remove_btn_lbl)
+		self.question_label = Label(
+											self.window,
+											textvariable=self.question_var,
+											font=("Helvetica", 10), fg="black")
 
+		# Position all items
 		self.entry_label.grid(row=0, column=0, padx=10, pady=3)
 		self.lbox_item_label_entry.grid(row=3, column=0, padx=10, pady=3)
 		self.lbox_locker_label_entry.grid(row=3, column=1, padx=10, pady=3)
@@ -257,76 +279,87 @@ class NewEntry(object):
 		self.lbox_stock_entry.grid(row=4, column=5, padx=10, pady=3)
 		self.lbox_type_entry.grid(row=4, column=6, padx=10, pady=3)
 		self.lbox_disc_entry.grid(row=4, column=7, padx=10, pady=3)
-		self.button = Button(self.window, text="Add Item", command=self.show_btn_lbl)
 
 		self.button.grid(row=0, column=2, padx=10, pady=3, columnspan=2)
+		self.question_label.grid(row=5, column=0, padx=10, pady=3, columnspan=5)
+		self.yes_button.grid(row=5, column=6, padx=10, pady=3)
+		self.no_button.grid(row=5, column=7, padx=10, pady=3)
 
-		self.question_label = Label(
-											self.window,
-											textvariable=self.question_var,
-											font=("Helvetica", 14), fg="black")
-		#
-		self.question_label.grid(row=5, column=0, padx=10, pady=3, columnspan=2)
-
-		self.yes_button = Button(self.window, text="Add Entry", command=self.add_item)
-		self.yes_button.grid(row=5, column=3, padx=10, pady=3)
-
-		self.no_button = Button(self.window, text="Change", command=self.remove_btn_lbl)
-		self.no_button.grid(row=5, column=4, padx=10, pady=3)
-
+		# Hide question label on load of new window.
 		self.question_label.grid_remove()
 		self.no_button.grid_remove()
 		self.yes_button.grid_remove()
 
 	def show_btn_lbl(self):
+
+		# Hide enter new entry until option chosen.
+		self.button.grid_remove()
+		# Run function so show labels and buttons when adding item.
 		self.question_label.grid()
 		self.no_button.grid()
 		self.yes_button.grid()
 		try:
-			self.question_var.set("Are you sure you want to add\n"
-			" {} {} {} {} {} {} {} {}?".format(
-				self.item_var.get().title(),
-				self.draw_var.get(),
-				self.locker_var.get(),
-				self.brand_var.get().title(),
-				self.part_var.get().upper(),
-				self.stock_var.get(),
-				self.type_var.get().upper(),
-				self.desc_var.get().title()))
+			self.question_var.set(
+				"Are you sure you want to add\n"
+				" {} - {} - {} - {} - {} - {} - {} - {}?".format(
+					self.item_var.get().title(),
+					self.draw_var.get(),
+					self.locker_var.get(),
+					self.brand_var.get().title(),
+					self.part_var.get().upper(),
+					self.stock_var.get(),
+					self.type_var.get().upper(),
+					self.desc_var.get().title()))
 		except TclError:
-			messagebox.showerror("Error", "Please only use a number for the Stock Number.")
+			messagebox.showerror("Error", "Please only use an integer for the Stock Number.")
 
 	def remove_btn_lbl(self):
+		# Hide again when trying again.
 		self.question_label.grid_remove()
 		self.no_button.grid_remove()
 		self.yes_button.grid_remove()
-
+		# Show add item button again.
+		self.button.grid()
 	def add_item(self):
-
+		# Open workbook to view all items with xlrd to find the correct input position.
 		book = open_workbook("Parts_List.xlsx")
+
+		# Open the workbook to add a row with openpyxl
 		wb = load_workbook(filename='Parts_List.xlsx')
-		# Open workbook
+
+		# Get the sheet names (xlrd)
 		sheet_names = book.sheet_names()
-		# Get sheet names
+
+		# Get the number of sheets (xlrd)
 		no_sheets = book.nsheets
-		# Set sheet number to x, add 1 when every sheet has finished.
+
+		# Loop threw all of the sheets to find the same sheet name as the locker variable.
 		for x in range(0, no_sheets):
 			if sheet_names[x] == self.locker_var.get():
+				# When found define the sheet we need to work with.
 				sheet = book.sheet_by_index(x)
+
+				# Loop threw all rows on sheet o find the correct draw number.
 				for row in range(2, sheet.nrows):
+					# When found open the worksheet in openpyxl
 					if self.draw_var.get() in str(sheet.cell(row, 0)):
 						ws = wb.worksheets[x]
-						ws.insert_rows(row + 3, 1)
+						# Insert row in the row number found plus 3, this will put it at the position just below the
+						# header for the draw.
+						# Define the border so that it does not copy the bold from header.
 						thin_border = Border(
 												right=Side(style='medium'),
 												bottom=Side(style=None)
 												)
+
 						try:
 							self.stock_var.get()
 
 						except TclError:
-							messagebox.showerror("Error", "Please only use a number for the Stock Number.")
 
+							messagebox.showerror("Error", "Please only use an integer for the Stock Number.")
+
+						# Set all the variables and borders into the cells.
 						ws.cell(column=1, row=row + 3, value=self.item_var.get().title()).border = thin_border
 						ws.cell(column=2, row=row + 3, value=self.brand_var.get().title()).border = thin_border
 						ws.cell(column=3, row=row + 3, value=self.part_var.get().upper()).border = thin_border
@@ -334,6 +367,7 @@ class NewEntry(object):
 						ws.cell(column=5, row=row + 3, value=self.type_var.get().upper()).border = thin_border
 						ws.cell(column=6, row=row + 3, value=self.desc_var.get().title()).border = thin_border
 
+						# Ensure workbook not open or permission available.
 						try:
 							wb.save("Parts_List.xlsx")
 						except PermissionError:
@@ -342,14 +376,17 @@ class NewEntry(object):
 								"No permission to write to the Parts List, please close the "
 								"document or gain permission to write to the file.")
 							break
+
+						# Remove all entry input. ( Maybe add a clear button on main page instead)
 						self.lbox_item_entry.delete(0, 'end')
 						self.lbox_brand_entry.delete(0, 'end')
 						self.lbox_part_entry.delete(0, 'end')
 						self.stock_var.set(0)
 						self.lbox_type_entry.delete(0, 'end')
 						self.lbox_disc_entry.delete(0, 'end')
-						self.items = readxls()
-						print("Done")
+					# Try update main list here.
+						# Remove question buttons, set question label to done.
+
 						self.remove_btn_lbl()
 						self.question_label.grid()
 						self.question_var.set("Done")
@@ -363,5 +400,5 @@ print('Starting mainloop()')
 
 root.mainloop()
 
+# pyinstaller --onefile --hidden-import=tkinter.messagebox -i=coal.ico -w --windowed --noconsole search.py
 
-# c:\python27\Scripts\pyinstaller.exe --onefile --hidden-import=xlrd -w --windowed --noconsole search.py
