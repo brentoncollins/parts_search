@@ -409,9 +409,9 @@ class Application(object):
 						# Set all the variables and borders into the cells.
 						ws.cell(column=1, row=row + 3, value=self.item_var.get().title()).border = thin_border
 						ws.cell(column=2, row=row + 3, value=self.brand_var.get().title()).border = thin_border
-						ws.cell(column=3, row=row + 3, value=self.part_var.get().upper()).border = thin_border
+						ws.cell(column=3, row=row + 3, value=self.type_var.get().upper()).border = thin_border
 						ws.cell(column=4, row=row + 3, value=self.stock_var.get()).border = thin_border
-						ws.cell(column=5, row=row + 3, value=self.type_var.get().upper()).border = thin_border
+						ws.cell(column=5, row=row + 3, value=self.part_var.get().upper()).border = thin_border
 						ws.cell(column=6, row=row + 3, value=self.desc_var.get().title()).border = thin_border
 
 						# Ensure workbook not open or permission available.
