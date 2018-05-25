@@ -145,7 +145,7 @@ class Application(object):
 		self.results_label.grid(row=1, column=2, padx=10, pady=3, columnspan=3)
 		self.add_entry_button.grid(row=0, column=7, padx=10, pady=3)
 		self.top_search_label.grid(row=0, column=2, padx=10, pady=3, columnspan=4)
-		self.search_label.grid(row=1, column=0, padx=10, pady=3)
+		self.search_label.grid(row=1, column=0, padx=10, pady=3, sticky= 'E')
 		self.list_box_item_label.grid(row=3, column=0, padx=10, pady=3)
 		self.list_box_locker_label.grid(row=3, column=1, padx=10, pady=3)
 		self.list_box_draw_label.grid(row=3, column=2, padx=10, pady=3)
@@ -155,7 +155,7 @@ class Application(object):
 		self.list_box_part_label.grid(row=3, column=6, padx=10, pady=3)
 		self.list_box_disc_label.grid(row=3, column=7, padx=10, pady=3)
 
-		self.entry.grid(row=1, column=1, padx=10, pady=3,columnspan=2)
+		self.entry.grid(row=1, column=1, padx=10, pady=3,columnspan=2,sticky= 'W')
 		self.list_box_item.grid(row=4, column=0, padx=10, pady=3)
 		self.list_box_locker.grid(row=4, column=1, padx=10, pady=3)
 		self.list_box_draw.grid(row=4, column=2, padx=10, pady=3)
@@ -180,6 +180,7 @@ class Application(object):
 
 		# Set all labels
 		self.search_label = Label(self.master, text="Enter New Item", font=("Helvetica", 16), fg="blue")
+		self.information_label = Label(self.master, text="Fill all relevant forms then click 'Add Item'", font=("Helvetica", 12), fg="black")
 		self.item_label_entry = Label(self.master, text="Item")
 		self.brand_label_entry = Label(self.master, text="Brand")
 		self.part_label_entry = Label(self.master, text="Part Number")
@@ -194,31 +195,32 @@ class Application(object):
 		self.question_label = Label(
 			self.master,
 			textvariable=self.question_var,
-			font=("Helvetica", 10), fg="black")
+			font=("Helvetica", 12), fg="black")
 
-		self.item_label_entry.grid(row=6, column=0, padx=10, pady=3)
-		self.locker_label_entry.grid(row=6, column=1, padx=10, pady=3)
-		self.draw_label_entry.grid(row=6, column=2, padx=10, pady=3)
-		self.brand_label_entry.grid(row=6, column=3, padx=10, pady=3)
-		self.type_label_entry.grid(row=6, column=4, padx=10, pady=3)
-		self.stock_label_entry.grid(row=6, column=5, padx=10, pady=3)
-		self.part_label_entry.grid(row=6, column=6, padx=10, pady=3)
-		self.disc_label_entry.grid(row=6, column=7, padx=10, pady=3)
+		self.item_label_entry.grid(row=7, column=0, padx=10, pady=3)
+		self.locker_label_entry.grid(row=7, column=1, padx=10, pady=3)
+		self.draw_label_entry.grid(row=7, column=2, padx=10, pady=3)
+		self.brand_label_entry.grid(row=7, column=3, padx=10, pady=3)
+		self.type_label_entry.grid(row=7, column=4, padx=10, pady=3)
+		self.stock_label_entry.grid(row=7, column=5, padx=10, pady=3)
+		self.part_label_entry.grid(row=7, column=6, padx=10, pady=3)
+		self.disc_label_entry.grid(row=7, column=7, padx=10, pady=3)
 
 		self.search_label.grid(row=5, column=0, padx=10, pady=3, columnspan=2)
-		self.item_entry.grid(row=7, column=0, padx=10, pady=3)
-		self.locker_entry_option.grid(row=7, column=1, padx=10, pady=3)
-		self.draw_entry_option.grid(row=7, column=2, padx=10, pady=3)
-		self.brand_entry.grid(row=7, column=3, padx=10, pady=3)
-		self.part_entry.grid(row=7, column=4, padx=10, pady=3)
-		self.stock_entry.grid(row=7, column=5, padx=10, pady=3)
-		self.type_entry.grid(row=7, column=6, padx=10, pady=3)
-		self.disc_entry.grid(row=7, column=7, padx=10, pady=3)
+		self.information_label.grid(row=6, column=0, padx=10, pady=3, columnspan=2)
+		self.item_entry.grid(row=8, column=0, padx=10, pady=3)
+		self.locker_entry_option.grid(row=8, column=1, padx=10, pady=3)
+		self.draw_entry_option.grid(row=8, column=2, padx=10, pady=3)
+		self.brand_entry.grid(row=8, column=3, padx=10, pady=3)
+		self.part_entry.grid(row=8, column=4, padx=10, pady=3)
+		self.stock_entry.grid(row=8, column=5, padx=10, pady=3)
+		self.type_entry.grid(row=8, column=6, padx=10, pady=3)
+		self.disc_entry.grid(row=8, column=7, padx=10, pady=3)
 
-		self.add_button.grid(row=5, column=1, padx=10, pady=3, columnspan=2)
+		self.add_button.grid(row=5, column=7, padx=10, pady=3, columnspan=2)
 		self.question_label.grid(row=5, column=2, padx=10, pady=3, columnspan=5)
-		self.yes_button.grid(row=5, column=6, padx=10, pady=3)
-		self.no_button.grid(row=5, column=7, padx=10, pady=3,sticky='W')
+		self.yes_button.grid(row=6, column=6, padx=10, pady=3, sticky='E')
+		self.no_button.grid(row=6, column=7, padx=10, pady=3, sticky='W')
 
 		# Function for updating the list/doing the search.
 		# It needs to be called here to populate the listbox.
@@ -293,6 +295,7 @@ class Application(object):
 		self.stock_label_entry.grid_remove()
 		self.part_label_entry.grid_remove()
 		self.disc_label_entry.grid_remove()
+		self.information_label.grid_remove()
 	def show_entry(self):
 		self.search_label.grid()
 		self.item_entry.grid()
@@ -312,7 +315,7 @@ class Application(object):
 		self.stock_label_entry.grid()
 		self.part_label_entry.grid()
 		self.disc_label_entry.grid()
-
+		self.information_label.grid()
 		self.add_button.grid()
 
 	def show_btn_lbl(self):
@@ -324,17 +327,18 @@ class Application(object):
 		self.no_button.grid()
 		self.yes_button.grid()
 		try:
-			self.question_var.set(
-				"Are you sure you want to add\n"
-				" {} - {} - {} - {} - {} - {} - {} - {}?".format(
-					self.item_var.get().title(),
-					self.draw_var.get(),
-					self.locker_var.get(),
-					self.brand_var.get().title(),
-					self.part_var.get().upper(),
-					self.stock_var.get(),
-					self.type_var.get().upper(),
-					self.desc_var.get().title()))
+
+			self.question_var.set("Is this information correct?")
+			# "Are you sure you want to add\n"
+			# 	" {} - {} - {} - {} - {} - {} - {} - {}?".format(
+			# 		self.item_var.get().title(),
+			# 		self.draw_var.get(),
+			# 		self.locker_var.get(),
+			# 		self.brand_var.get().title(),
+			# 		self.part_var.get().upper(),
+			self.stock_var.get()
+			# 		self.type_var.get().upper(),
+			# 		self.desc_var.get().title()))
 		except TclError:
 			messagebox.showerror("Error", "Please only use an integer for the Stock Number.")
 
