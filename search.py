@@ -113,9 +113,9 @@ class Application(object):
 		self.entry = Entry(master, textvariable=self.search_var, width=20)
 		self.list_box_item = Listbox(master, width=25, height=25)
 		self.list_box_brand = Listbox(master, width=20, height=25)
-		self.list_box_part = Listbox(master, width=20, height=25)
+		self.list_box_part = Listbox(master, width=30, height=25)
 		self.list_box_stock = Listbox(master, width=15, height=25)
-		self.list_box_type = Listbox(master, width=15, height=25)
+		self.list_box_type = Listbox(master, width=20, height=25)
 		self.list_box_disc = Listbox(master, width=50, height=25)
 		self.list_box_draw = Listbox(master, width=15, height=25)
 		self.list_box_locker = Listbox(master, width=15, height=25)
@@ -450,5 +450,5 @@ print('Starting mainloop()')
 
 root.mainloop()
 
-# pyinstaller --onefile --hidden-import=tkinter.messagebox -i=coal.ico -w --windowed --noconsole search.py
+# cd c:\py pyinstaller --onefile --hidden-import=tkinter.messagebox -i=coal.ico -w --windowed --noconsole search.py
 
