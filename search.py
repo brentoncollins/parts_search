@@ -25,12 +25,13 @@ def readxls():
 		draw = 0
 		# Start at draw 0, when finding the first draw in the spreadsheet add one.
 		for row in range(2, sheet.nrows):
-			if "Draw" in str(sheet.cell(row, 0)):
+			if "Draw" == str(sheet.cell(row, 0).value.split(" ")[0]):
+
 				# If found draw, move to the next draw.
 				draw += 1
 			else:
 
-				if "Item" in str(sheet.cell(row, 0)) or sheet.cell(row, 0).value == "":
+				if "Item" in str(sheet.cell(row, 0).value.split(" ")[0]) or sheet.cell(row, 0).value == "":
 					# Ignore all rows that start with item or is empty.
 					pass
 
@@ -76,15 +77,7 @@ class Application(object):
 	def __init__(self, master):
 		self.master = master
 
-		try:
-			self.items = readxls()
-		except FileNotFoundError:
-			messagebox.showerror(
-				"File not found",
-				"Please ensure that 'Parts_List.xlsx' is located in the same directory as the executable."
-				"\n\nNo results will be shown.")
-
-			self.items = []
+		self.read_xl()
 
 	# Create main GUI window
 
@@ -145,7 +138,7 @@ class Application(object):
 		self.results_label.grid(row=1, column=2, padx=10, pady=3, columnspan=3)
 		self.add_entry_button.grid(row=0, column=7, padx=10, pady=3)
 		self.top_search_label.grid(row=0, column=2, padx=10, pady=3, columnspan=4)
-		self.search_label.grid(row=1, column=0, padx=10, pady=3, sticky= 'E')
+		self.search_label.grid(row=1, column=0, padx=10, pady=3, sticky='E')
 		self.list_box_item_label.grid(row=3, column=0, padx=10, pady=3)
 		self.list_box_locker_label.grid(row=3, column=1, padx=10, pady=3)
 		self.list_box_draw_label.grid(row=3, column=2, padx=10, pady=3)
@@ -155,7 +148,7 @@ class Application(object):
 		self.list_box_part_label.grid(row=3, column=6, padx=10, pady=3)
 		self.list_box_disc_label.grid(row=3, column=7, padx=10, pady=3)
 
-		self.entry.grid(row=1, column=1, padx=10, pady=3,columnspan=2,sticky= 'W')
+		self.entry.grid(row=1, column=1, padx=10, pady=3, columnspan=2, sticky='W')
 		self.list_box_item.grid(row=4, column=0, padx=10, pady=3)
 		self.list_box_locker.grid(row=4, column=1, padx=10, pady=3)
 		self.list_box_draw.grid(row=4, column=2, padx=10, pady=3)
@@ -164,7 +157,6 @@ class Application(object):
 		self.list_box_stock.grid(row=4, column=5, padx=10, pady=3)
 		self.list_box_type.grid(row=4, column=6, padx=10, pady=3)
 		self.list_box_disc.grid(row=4, column=7, padx=10, pady=3)
-
 
 		# Define all entry's and option menus.
 		self.item_entry = Entry(self.master, textvariable=self.item_var, width=25)
@@ -180,7 +172,10 @@ class Application(object):
 
 		# Set all labels
 		self.search_label = Label(self.master, text="Enter New Item", font=("Helvetica", 16), fg="blue")
-		self.information_label = Label(self.master, text="Fill all relevant forms then click 'Add Item'", font=("Helvetica", 12), fg="black")
+		self.information_label = Label(
+			self.master,
+			text="Fill all relevant forms then click 'Add Item'",
+			font=("Helvetica", 12), fg="black")
 		self.item_label_entry = Label(self.master, text="Item")
 		self.brand_label_entry = Label(self.master, text="Brand")
 		self.part_label_entry = Label(self.master, text="Part Number")
@@ -190,8 +185,8 @@ class Application(object):
 		self.draw_label_entry = Label(self.master, text="Draw")
 		self.locker_label_entry = Label(self.master, text="Locker")
 		self.add_button = Button(self.master, text="Add Item", command=self.show_btn_lbl)
-		self.yes_button = Button(self.master, text="Add", command=self.remove_btn_lbl,bg="green")
-		self.no_button = Button(self.master, text="Change", command=self.change_entry,bg="red")
+		self.yes_button = Button(self.master, text="Add", command=self.remove_btn_lbl, bg="green")
+		self.no_button = Button(self.master, text="Change", command=self.change_entry, bg="red")
 		self.question_label = Label(
 			self.master,
 			textvariable=self.question_var,
@@ -270,7 +265,6 @@ class Application(object):
 				self.list_box_item.itemconfig(x, {'bg': 'light blue'})
 		self.results.set("{} Results Found".format(int(self.list_box_item.size())))
 
-
 	def hide_entry(self):
 		self.search_label.grid_remove()
 		self.item_entry.grid_remove()
@@ -296,6 +290,7 @@ class Application(object):
 		self.part_label_entry.grid_remove()
 		self.disc_label_entry.grid_remove()
 		self.information_label.grid_remove()
+
 	def show_entry(self):
 		self.search_label.grid()
 		self.item_entry.grid()
@@ -347,6 +342,7 @@ class Application(object):
 		self.no_button.grid_remove()
 		self.yes_button.grid_remove()
 		self.add_button.grid()
+
 	def remove_btn_lbl(self):
 		# Hide again when trying again.
 		self.question_label.grid_remove()
@@ -366,6 +362,7 @@ class Application(object):
 				"\n\nNo results will be shown.")
 
 			self.items = []
+
 	def add_item(self):
 		# Open workbook to view all items with xlrd to find the correct input position.
 		book = open_workbook("Parts_List.xlsx")
@@ -394,9 +391,11 @@ class Application(object):
 						# header for the draw.
 						ws.insert_rows(row + 3)
 						# Define the border so that it does not copy the bold from header.
+
 						thin_border = Border(
 												right=Side(style='medium'),
-												bottom=Side(style=None)
+												bottom=Side(style=None),
+												top=Side(style='medium')
 												)
 
 						try:
@@ -408,11 +407,17 @@ class Application(object):
 
 						# Set all the variables and borders into the cells.
 						ws.cell(column=1, row=row + 3, value=self.item_var.get().title()).border = thin_border
+						ws.cell(column=1, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 						ws.cell(column=2, row=row + 3, value=self.brand_var.get().title()).border = thin_border
+						ws.cell(column=2, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 						ws.cell(column=3, row=row + 3, value=self.type_var.get().upper()).border = thin_border
+						ws.cell(column=3, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 						ws.cell(column=4, row=row + 3, value=self.stock_var.get()).border = thin_border
+						ws.cell(column=4, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 						ws.cell(column=5, row=row + 3, value=self.part_var.get().upper()).border = thin_border
+						ws.cell(column=5, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 						ws.cell(column=6, row=row + 3, value=self.desc_var.get().title()).border = thin_border
+						ws.cell(column=6, row=row + 4).border = Border(top=None, right=Side(style='medium'))
 
 						# Ensure workbook not open or permission available.
 						try:
