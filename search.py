@@ -360,6 +360,17 @@ class Application(object):
 			self.items = []
 
 	def add_item(self):
+		if self.locker_var.get() is "":
+			messagebox.showinfo("No Information provided", "Please enter an locker before adding an entry.")
+			return
+		if self.draw_var.get() is "":
+			messagebox.showinfo("No Information provided", "Please enter an draw number before adding an entry.")
+			return
+
+		if self.item_var.get() is "":
+			messagebox.showinfo("No Information provided", "Please enter an item name before adding an entry.")
+			return
+
 		# Open workbook to view all items with xlrd to find the correct input position.
 		book = open_workbook("Parts_List.xlsx")
 
@@ -421,7 +432,8 @@ class Application(object):
 						except PermissionError:
 							messagebox.showerror(
 								"Error",
-								"No permission to write to the Parts List, please close the "
+								"No permission to write to the Parts List, ensure that know one "
+								"is currently accessing the document, please close the "
 								"document or gain permission to write to the file.")
 							break
 
