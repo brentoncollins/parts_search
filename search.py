@@ -239,19 +239,15 @@ class Application(object):
 		for y in self.items:
 			for item in y:
 				for key, value in item[0].items():
-					for val in value:
-						if search_term.lower() in str(val).lower() or search_term.lower() in key.lower():
-							self.list_box_item.insert(END, key)
-							self.list_box_draw.insert(END, value[0])
-							self.list_box_brand.insert(END, value[1])
-							self.list_box_type.insert(END, value[2])
-
-							self.list_box_stock.insert(END, value[3])
-							self.list_box_part.insert(END, value[4])
-							self.list_box_disc.insert(END, value[5])
-							self.list_box_locker.insert(END, value[6])
-
-							break
+					if search_term.lower() in str(value).lower() or search_term.lower() in key.lower():
+						self.list_box_item.insert(END, key)
+						self.list_box_draw.insert(END, value[0])
+						self.list_box_brand.insert(END, value[1])
+						self.list_box_type.insert(END, value[2])
+						self.list_box_stock.insert(END, value[3])
+						self.list_box_part.insert(END, value[4])
+						self.list_box_disc.insert(END, value[5])
+						self.list_box_locker.insert(END, value[6])
 
 		for x in range(0, self.list_box_item.size()):
 			if x & 1:
